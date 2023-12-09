@@ -1,3 +1,5 @@
+# 2023.12.05 - update
+
 
 from enum import Enum
 from typing import List, NamedTuple, Callable, Optional
@@ -96,7 +98,7 @@ class MazeMovement:
             self.maze.mark_cell(self.current_location)  # Mark the current location
             print(self.maze)  # Print the maze with the marked path
 
-            direction = input("Choose a direction of travel according to your compass: ")
+            direction = input("Which direction on your compass would you like to go? Remember you want to get to the goal before the algorithm does.: ").lower()
             self.counter += 1
             result = self.go_direction(direction)
 
@@ -105,7 +107,6 @@ class MazeMovement:
                 break
             if self.current_location == self.maze.goal:
                 # Reached the goal
-                print(self.counter)
                 self.goal_reached = True
                 print("Goal reached!")
                 break
@@ -166,52 +167,39 @@ if __name__ == "__main__":
     m: Maze = Maze(20,20)
     start_location = MazeLocation(0, 0)
     maze_movement = MazeMovement(m, start_location)
-    print("Navigate through the maze. Try to reach the goal with as few moves as possible.")
 
-    maze_movement.move()
-
-
+    # Run search algorithms
     solution1: Optional[Node[MazeLocation]] = dfs(m.start, m.goal_test, m.successors)
-    if solution1 is None:
-        print("No solution found using depth-first search!")
-    else:
-        path1: List[MazeLocation] = node_to_path(solution1)
-        m.mark(path1)
-        print(m)
-        m.clear(path1)
-        dfs_path_length = len(path1)
-        print(f"DFS path length: {dfs_path_length}")
-    # Test BFS
     solution2: Optional[Node[MazeLocation]] = bfs(m.start, m.goal_test, m.successors)
-    if solution2 is None:
-        print("No solution found using breadth-first search!")
-    else:
-        path2: List[MazeLocation] = node_to_path(solution2)
-        m.mark(path2)
-        print(m)
-        m.clear(path2)
-        bfs_path_length = len(path2)
-        print(f"BFS path length: {bfs_path_length}")
-    # Test A*
     distance: Callable[[MazeLocation], float] = manhattan_distance(m.goal)
     solution3: Optional[Node[MazeLocation]] = astar(m.start, m.goal_test, m.successors, distance)
-    if solution3 is None:
-        print("No solution found using A*!")
-    else:
-        path3: List[MazeLocation] = node_to_path(solution3)
-        m.mark(path3)
-        print(m)
-        a_star_path_length = len(path3)
+
+    # Calculate path lengths
+    dfs_path_length = len(node_to_path(solution1)) if solution1 else None
+    bfs_path_length = len(node_to_path(solution2)) if solution2 else None
+    a_star_path_length = len(node_to_path(solution3)) if solution3 else None
+
+
+    # Let the user move through the maze
+    goal_reached_by_user = maze_movement.move()
+
+    # Display results of search algorithms
+    print("Search Algorithm Results:")
+    if dfs_path_length:
+        print(f"DFS path length: {dfs_path_length}")
+    if bfs_path_length:
+        print(f"BFS path length: {bfs_path_length}")
+    if a_star_path_length:
         print(f"A* path length: {a_star_path_length}")
 
-# Compare only if the goal was reached
+    # Compare only if the goal was reached by the user
     if maze_movement.goal_reached:
         user_path_length = maze_movement.counter
-        print(f"Your path length: {user_path_length}")
+        print(f"\nYour path length: {user_path_length}")
 
         # Compare user's performance with each algorithm
         for algo_name, algo_length in [("DFS", dfs_path_length), ("BFS", bfs_path_length), ("A*", a_star_path_length)]:
-            if algo_length is not None:
+            if algo_length:
                 if user_path_length < algo_length:
                     print(f"You beat {algo_name} by {algo_length - user_path_length} steps!")
                 elif user_path_length == algo_length:
@@ -219,4 +207,4 @@ if __name__ == "__main__":
                 else:
                     print(f"{algo_name} was more efficient by {user_path_length - algo_length} steps.")
     else:
-        print("As the goal was not reached, no comparison will be made.")
+        print("As the goal was not reached, we don't know if you beat the algorithm.")

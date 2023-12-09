@@ -1,31 +1,7 @@
-# algo_maze
-Simple maze game. Try to reach the goal before the BFS, DFS, and A* algos can!
-## 2023.11.30
+This programme is based on an exercise from *Classic Computer Science Problems in Python* by David Kopec. You can read his code [here](https://github.com/davecom/ClassicComputerScienceProblemsInPython/tree/master/hapter2).
 
-- Can I call the location function from the main entry point?
+My programme creates a maze in your terminal that is composed of standard letter characters. You can navigate the maze by typing compass directions into the terminal. You should try to go from the start to the goal. 
 
-## 2023.11.29
-- So I think I have the right elements in the maze class, I just need to work out how to call the input function and have it progressively update.
+However, you are not the only one attempting to traverse this maze. Following Kopec's original programme, several algorithms are also working through it - specifically breadth first Search, depth first search, and A*. 
 
-## 2023.11.28 
-
-- I think I can use composition to pass the location attribute from the MazeMoment class to the Maze class
-
-## 2023.11.25
-- Need to work out how to print something with Plane.
-- Could I make a more generic object to represent a plane, of which a maze is a form that has a maze layout.
-- Review DK's code, try to make adjustments
-- Remove specific numbers for rows and columns, let the users define that when calling the function.
-
-## 2023.11.15
-
-- Could I generate the grid and then hide it?
-- Should a grid be a class on it's own? (I could specify some parameter when I call it at main then)
-
-## 2023.11.12
-
-- Can you beat the algorithm? Users try to navigate through the maze faster the algorithms.
-- I need to figure out a way to get a cursor to represent the play and express movement.
-
-## 2023.11.11
-
+This programme will track the number of moves you take to complete the maze as well as the algorithms. See if you can beat them!
